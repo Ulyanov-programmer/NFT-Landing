@@ -1,0 +1,38 @@
+<header class="header">
+  <div class="header__body container header__container">
+    <a href="/" class="logo" aria-label="logo-RefToMainPage">
+      @@include('_logo.htm', {})
+    </a>
+
+    <nav class="navmenu">
+      <div class="navmenu__body">
+        <ul class='navmenu__list'>
+          <li><button class="theme-toggler" type='button'>Toggle theme</button></li>
+          <li><a href='#' target='_blank' rel='noopener noreferrer'>Features</a></li>
+          <li><a href='#' target='_blank' rel='noopener noreferrer'>About</a></li>
+          <li><a href='#' target='_blank' rel='noopener noreferrer'>Launch</a></li>
+          <li><a href='#' target='_blank' rel='noopener noreferrer'>Sign Up</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <button aria-label="burger-menu" type="button" id="burgerButton" class="header__burger burger-btn">
+      <svg width="40" height="40" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M0 2C0 0.895431 0.895431 0 2 0H22C23.1046 0 24 0.895431 24 2C24 3.10457 23.1046 4 22 4H2C0.89543 4 0 3.10457 0 2ZM0 11C0 9.89543 0.895431 9 2 9H22C23.1046 9 24 9.89543 24 11C24 12.1046 23.1046 13 22 13H2C0.89543 13 0 12.1046 0 11ZM2 18C0.895431 18 0 18.8954 0 20C0 21.1046 0.89543 22 2 22H22C23.1046 22 24 21.1046 24 20C24 18.8954 23.1046 18 22 18H2Z"
+          fill="#999999" />
+      </svg>
+    </button>
+    <nav class="fullscreen-navmenu">
+      <div class="fullscreen-navmenu__body">
+        <ul>
+          <li><button class="fs-element theme-toggler" type='button'>Toggle theme</button></li>
+          <li><a class="fs-element" href='#' target='_blank' rel='noopener noreferrer'>Features</a></li>
+          <li><a class="fs-element" href='#' target='_blank' rel='noopener noreferrer'>About</a></li>
+          <li><a class="fs-element" href='#' target='_blank' rel='noopener noreferrer'>Launch</a></li>
+          <li><a class="fs-element" href='#' target='_blank' rel='noopener noreferrer'>Sign Up</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>

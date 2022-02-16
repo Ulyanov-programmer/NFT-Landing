@@ -1,0 +1,87 @@
+// Hides the scroll bar, but leaves the ability to scroll
+html
+  @media (min-width 768px)
+    -ms-overflow-style none
+    scrollbar-width none
+
+    ::-webkit-scrollbar
+      width 0
+
+.container
+  margin auto
+
+  @media (min-width unit($layoutWidth, px))
+    // Insert the width of the container as a percentage of the width of the layout.
+    width 70%
+
+  @media (min-width 768px) and (max-width unit($layoutWidth, px))
+    width 90%
+
+  @media (min-width 426px) and (max-width 768px)
+    width 90%
+
+  @media (max-width 426px)
+    width 95%
+
+.mob-fs-block-container {
+  margin auto;
+
+  @media (min-width unit($layoutWidth, px)) {
+    // Insert the width of the container as a percentage of the width of the layout.
+    width 70%;
+  }
+
+  @media (min-width 768px) and (max-width unit($layoutWidth, px)) {
+    width 90%;
+  }
+
+  @media (min-width 426px) and (max-width 768px) {
+    width 90%;
+  }
+
+  @media (max-width 426px) {
+    width 100%;
+  }
+}
+
+.adaptive-image
+  display block
+  position relative
+  padding 0 0 100% 0
+
+  img
+    position absolute
+    top 0
+    left 0
+    block-size 100% 100%
+    object-fit cover
+
+.adaptive-video
+  display block
+  position relative
+  padding 0 0 100% 0
+
+  video
+    position absolute
+    top 0
+    left 0
+    size(100%, 100%)
+    object-fit contain
+
+.modal-window
+  position fixed
+  z-index 15
+  top 0
+  left 0
+  background #00000046
+  block-size 100% 100%
+  hide()
+  transition all 0.5s ease
+
+  &.active
+    show()
+
+  &__body
+    flex-set row nowrap
+    height 100%
+    flex-content-position center center

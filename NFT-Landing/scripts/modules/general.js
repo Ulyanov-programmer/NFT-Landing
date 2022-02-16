@@ -1,0 +1,1 @@
+export function returnScrollbarWidth(){return window.innerWidth-document.querySelector("html").clientWidth}export function isNullOrWhiteSpaces(...t){for(const e of t)if(!e||""===e.trim())return!0;return!1}export function sleep(t){return new Promise((e=>setTimeout(e,t)))}

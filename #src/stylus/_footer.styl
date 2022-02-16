@@ -1,0 +1,98 @@
+@import '_mixins';
+
+.footer {
+  &__body {
+    padding 7% 5% 7% 5%;
+  }
+
+  &__top {
+    flex-set row wrap;
+    flex-content-position($jc: space-between, $ai: flex-start);
+  }
+
+  &__general {
+    flex-set column wrap;
+    firstLevelElementsMargin 'bottom' 25;
+    margin-right 25px;
+    margin-bottom 35px;
+  }
+
+  &__logo {
+  }
+
+  &__notification {
+  }
+
+  &__socials {
+    flex-set row nowrap;
+  }
+
+  &__social {
+    &:not(:last-child) {
+      padding-right 15px;
+    }
+  }
+
+  &__nav {
+    flex-set row wrap;
+    margin-bottom 120px;
+
+    @media (max-width 768px) {
+      margin-bottom 70px;
+    }
+  }
+
+  &__bottom {
+    flex-set row wrap;
+    flex-content-position($jc: space-between, $ai: flex-start);
+    firstLevelElementsMargin 'right' 15;
+  }
+
+  &__copy {
+    color var(--text-c);
+  }
+
+  &__date-publish {
+    color var(--text-c);
+  }
+}
+
+.footer-nav {
+  &__block {
+    flex-set column nowrap;
+    min-width 200px;
+    padding-right 50px;
+    padding-bottom 25px;
+
+    @media (max-width 500px) {
+      padding-right 0;
+      min-width 120px;
+    }
+  }
+
+  &__title {
+    text-transform uppercase;
+    font-family Inter-b;
+    margin-bottom 20px;
+    font-size adapt-fsize(22, 20);
+  }
+
+  &__ul {
+    
+    firstLevelElementsMargin 'bottom' 15;
+  }
+
+  &__li {
+    a {
+      display inline-block;
+      color inherit;
+
+      @media (max-width 426px) {
+        padding 10px 0 10px 0;
+      }
+      &:hover,&:focus {
+        text-decoration underline
+      }
+    }
+  }
+}

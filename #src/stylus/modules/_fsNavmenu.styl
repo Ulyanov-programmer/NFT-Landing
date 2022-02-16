@@ -1,0 +1,94 @@
+.fullscreen-navmenu {
+  position fixed;
+  top 0;
+  right -100%;
+  z-index 4 !important;
+  block-size 100% 100%;
+  font-size 30px;
+  color #fff;
+  flex-set column nowrap;
+  transition right 0.5s ease;
+
+  @media (min-width $burgerMenuShowWidth) {
+    display none;
+  }
+
+  button {
+    font-size 30px;
+    width 100%;
+  }
+
+  &.active {
+    right 0;
+  }
+
+  &__body {
+    flex-set column nowrap;
+    overflow auto;
+    background #000000ad;
+    min-height 100%;
+
+    ul {
+      margin 0 auto;
+      width 100%;
+
+      .fs-element {
+        &:not(:last-child) {
+          border-bottom 1px solid #fff;
+        }
+
+        display flex;
+        flex-grow 1;
+        justify-content center;
+        padding 25px 0 25px 0;
+        color #fff;
+      }
+    }
+  }
+}
+
+.burger-btn {
+  z-index 5;
+  display block;
+  cursor pointer;
+
+  @media (min-width $burgerMenuShowWidth) {
+    display none;
+  }
+
+  &__svg {
+    * {
+      transition all 0.5s ease;
+    }
+
+    rect {
+      border-radius 25px;
+    }
+  }
+
+  &__rect-top {
+    transform-origin center;
+  }
+
+  // &__rect-center
+  &__rect-bottom {
+    transform-origin center;
+  }
+
+  &.active {
+    .burger-btn__rect-top {
+      transform rotate(45deg) translate(-5%, 50%);
+    }
+
+    .burger-btn__rect-center {
+      visibility hidden;
+      opacity 0;
+      pointer-events none;
+      height 0;
+    }
+
+    .burger-btn__rect-bottom {
+      transform rotate(-45deg) translate(-5%, -50%);
+    }
+  }
+}

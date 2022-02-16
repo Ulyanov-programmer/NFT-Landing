@@ -1,0 +1,55 @@
+block-size($width, $height = $width)
+  width $width
+  height $height
+
+fontStyle($font_name, $file_name, $weight, $style)
+  @font-face
+    font-family $font_name
+    font-display swap
+    src 'url("../fonts/%s.woff2") format("woff2")' % $file_name
+    font-weight $weight
+    font-style $style
+
+adaptive-property($property, $value, $min-value)
+  {$property} 'calc(%spx + (%s - %s) * ((100vw - 320px) / (1000 - 320)))' % ($min-value $value $min-value)
+
+adapt-fsize($px-size, $min-size = 12)
+  $minSize = $min-size
+  $min-size = remNumber($min-size)
+  $lWidthRem = remNumber($layoutWidth)
+  $pxSizeRem = remNumber($px-size)
+  $min-size-rem = rem($minSize)
+  return 'calc((100vw - 20rem)/(%s - 20) * (%s - %s) + %s)' % ($lWidthRem $pxSizeRem $min-size $min-size-rem)
+
+rem($px-size)
+  return unit(($px-size / $mainFontSize), 'rem')
+
+remNumber($px-size)
+  return ($px-size / $mainFontSize)
+
+flex-set($type = row, $wrap = nowrap)
+  display flex
+  flex-flow $type $wrap
+
+flex-content-position($jc = flex-start, $ai = flex-start)
+  justify-content $jc
+  align-items $ai
+
+firstLevelElementsMargin($margin-side, $value) {
+  >* {
+    &:not(:last-child) {
+      margin-{$margin-side} unit($value, px);
+    }
+  }
+}
+
+
+hide()
+  overflow hidden
+  opacity 0
+  pointer-events none
+
+show()
+  overflow auto
+  opacity 1
+  pointer-events all

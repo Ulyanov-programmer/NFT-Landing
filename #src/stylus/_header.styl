@@ -1,0 +1,74 @@
+@import '_mixins';
+@import 'modules/_fsNavmenu';
+
+.header {
+  position relative;
+  flex-set row nowrap;
+  justify-content center;
+  z-index 5;
+
+  &__body {
+    flex-set row nowrap;
+    flex-content-position space-between center;
+    padding 60px 0 200px 0;
+
+    @media (max-width 768px) {
+      padding 20px 0 20px 0;
+    }
+
+    * {
+      z-index 5;
+    }
+  }
+}
+
+.navmenu {
+  @media (max-width $burgerMenuShowWidth) {
+    display none;
+  }
+
+  &__body {
+    display flex;
+  }
+
+  &__list {
+    flex-set row wrap;
+    justify-content flex-end
+    padding 0 5px 0 5px;
+
+    li {
+      flex-set row nowrap;
+      flex-content-position center center;
+      transition all 0.2s ease 0s;
+
+      &:not(:last-child) {
+        padding-right 10px;
+      }
+
+      a, button {
+        flex-set row nowrap;
+        flex-content-position center center;
+        flex 1 0 100%;
+        padding 5px 5px 5px 5px;
+        color var(--light-text-c);
+        block-size 100%;
+        transition all 0.2s ease 0s;
+        font-size 20px;
+
+        &:hover, &:focus {
+          color #FF3998;
+        }
+      }
+    }
+  }
+}
+
+.logo {
+  z-index 10;
+
+  svg {
+    path {
+      fill var(--text-c);
+    }
+  }
+}
