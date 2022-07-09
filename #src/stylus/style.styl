@@ -496,13 +496,6 @@ body {
 }
 
 .press {
-  transition all 1s ease;
-  transform translate(0, 25%);
-
-  &.active {
-    transform translate(0, 0);
-  }
-
   &__body {
     flex-set row wrap;
     justify-content center;
@@ -515,6 +508,14 @@ body {
 }
 
 .press-item {
+	opacity 0;
+  transition all 1s ease;
+  transform translate(0, 25%);
+
+  &.active {
+		opacity 1;
+    transform translate(0, 0);
+  }
   padding 20px 0 20px 0;
 
   @media (min-width 426px) {

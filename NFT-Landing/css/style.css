@@ -985,21 +985,6 @@ body button {
   z-index: 3;
 }
 
-.press {
-  -webkit-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  transition: all 1s ease;
-  -webkit-transform: translate(0, 25%);
-      -ms-transform: translate(0, 25%);
-          transform: translate(0, 25%);
-}
-
-.press.active {
-  -webkit-transform: translate(0, 0);
-      -ms-transform: translate(0, 0);
-          transform: translate(0, 0);
-}
-
 .press__body {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1014,7 +999,21 @@ body button {
 }
 
 .press-item {
+  opacity: 0;
+  -webkit-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+  -webkit-transform: translate(0, 25%);
+      -ms-transform: translate(0, 25%);
+          transform: translate(0, 25%);
   padding: 20px 0 20px 0;
+}
+
+.press-item.active {
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+          transform: translate(0, 0);
 }
 
 .auction__text-container {

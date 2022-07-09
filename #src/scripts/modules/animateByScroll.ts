@@ -1,118 +1,164 @@
-import { isNullOrWhiteSpaces } from "./general.js";
-
+interface AnimateByScrollArgs {
+	/**
+		Do you want the animations to be played again if the blocks they leave the screen? 
+		Set it to true, but i don't recommend to use this as true in production.
+	*/
+	repeatingAnimations: boolean
+	/** This class will be applied when the blocks are sufficiently shown on the display. */
+	activeAnimationClass?: string
+}
 
 export default class AnimateByScroll {
-  private static isScrolling: boolean = true
-  private static repeatingAnimations: boolean
-  private static elements: AnimationElement[]
+	private static repeatingAnimations: boolean = false
+	private static elements: AnimationGroup[]
+	public activeAnimationClass: string = 'active'
 
-  constructor(repeatingAnimations: boolean = false, ...elements: AnimationElement[]) {
-    AnimateByScroll.repeatingAnimations = repeatingAnimations
-    AnimateByScroll.elements = elements
+	constructor(arg: AnimateByScrollArgs, ...elements: AnimationGroup[]) {
+		AnimateByScroll.repeatingAnimations = arg.repeatingAnimations
 
-    this.checkAndToggleAnimationForElements()
-    for (const element of AnimateByScroll.elements) {
-      element.setMediaProperties()
-    }
+		if (elements.length <= 0) {
+			console.log('[AnimateByScroll] No elements have been created.')
+			return
+		}
+		if (arg.activeAnimationClass)
+			this.activeAnimationClass = arg.activeAnimationClass
 
-    window.addEventListener('scroll', () => {
-      this.checkAndToggleAnimationForElements()
-    }, false)
-    window.addEventListener('resize', () => {
-      for (const element of AnimateByScroll.elements) {
-        element.setMediaProperties()
-      }
-    }, false)
-  }
+		AnimateByScroll.elements = elements
 
-  private checkAndToggleAnimationForElements() {
-    if (AnimateByScroll.isScrolling) {
+		this.checkAndToggleAnimationForElements()
+		for (let element of AnimateByScroll.elements) {
+			element.mediaQueries.length > 0 ? element.setMediaProperties() : false
+		}
 
-      window.requestAnimationFrame(() => {
-        for (const animateElement of AnimateByScroll.elements) {
 
-          if (this.isPartiallyVisible(animateElement)) {
-            setTimeout(() => {
-              animateElement.htmlElement.classList.add('active')
-            }, animateElement.timeoutBeforeStart);
-          }
-          else if (AnimateByScroll.repeatingAnimations) {
-            animateElement.htmlElement.classList.remove('active')
-          }
-          AnimateByScroll.isScrolling = false
-        }
-      })
-    }
+		window.addEventListener('scroll', () => {
+			this.checkAndToggleAnimationForElements()
+		}, false)
 
-    AnimateByScroll.isScrolling = true
-  }
-  private isPartiallyVisible(animElement: AnimationElement) {
-    /* thanks for this function: 
-      en: https://www.kirupa.com/animations/creating_scroll_activated_animations.htm
-      ru: http://webupblog.ru/animatsiya-pri-prokrutke-stranitsy-na-javascript-i-css/
-    */
+		window.addEventListener('resize', () => {
+			for (let element of AnimateByScroll.elements) {
+				element.setMediaProperties()
+			}
+		}, false)
+	}
 
-    var elementBoundary = animElement.htmlElement.getBoundingClientRect();
+	private checkAndToggleAnimationForElements() {
+		window.requestAnimationFrame(() => {
+			for (let animateElement of AnimateByScroll.elements) {
 
-    var top = elementBoundary.top;
-    var bottom = elementBoundary.bottom;
-    var height = elementBoundary.height;
-    let heightWithCoeff = height * animElement.animStartCoeff
+				for (const animateHtml of animateElement.htmlElements) {
 
-    return ((top + heightWithCoeff >= 0) && (heightWithCoeff + window.innerHeight >= bottom));
-  }
+					if (this.isPartiallyVisible(animateElement, animateHtml) &&
+						!animateHtml.classList.contains(this.activeAnimationClass)) {
+
+						setTimeout(() => {
+							animateHtml.classList.add(this.activeAnimationClass)
+						}, parseInt(animateHtml.dataset.timeout as string))
+					}
+					else if (!this.isPartiallyVisible(animateElement, animateHtml) && AnimateByScroll.repeatingAnimations) {
+						animateHtml.classList.remove(this.activeAnimationClass)
+					}
+				}
+			}
+		})
+	}
+	private isPartiallyVisible(animElement: AnimationGroup, animHtml: HTMLElement) {
+		/* thanks for this function: 
+			en: https://www.kirupa.com/animations/creating_scroll_activated_animations.htm
+			ru: http://webupblog.ru/animatsiya-pri-prokrutke-stranitsy-na-javascript-i-css/
+		*/
+
+		var elementBoundary = animHtml.getBoundingClientRect()
+
+		var top = elementBoundary.top
+		var bottom = elementBoundary.bottom
+		var height = elementBoundary.height
+		let heightWithCoeff = height * parseFloat(animHtml.dataset.viewStartCoeff as string) 
+
+		return ((top + heightWithCoeff >= 0) && (heightWithCoeff + window.innerHeight >= bottom))
+	}
 }
 
-export class AnimationElement {
-  public htmlElement: HTMLElement
-  public animStartCoeff: number
-  public timeoutBeforeStart: number
-  public mediaQueries: AnimationMediaQuery[]
-  private defAnimStartCoeff: number
-  private defTimeoutBeforeStart: number
+interface AnimationGroupArgs {
+	/** Selector of the element/elements to which the active animation class will be applied. */
+	selectors: string
+	/** 
+		For example, 1 => class is assigned as soon as the element is shown on the screen. 
+		0.5 => as soon as it is shown at half. 
+	*/
+	animateStartCoeff: number
+	/** The delay before the animation starts in milliseconds. */
+	timeoutBeforeStart: number
+}
 
-  constructor(selector: string, animateStartCoeff: number = 1, timeoutBeforeStart: number = 0,
-    ...mediaQueries: AnimationMediaQuery[]) {
-    if (isNullOrWhiteSpaces(selector)) {
-      if (animateStartCoeff <= 0 || animateStartCoeff > 1) {
-        throw new RangeError('animateStartCoeff < 0 or > 1')
-      }
-      throw new RangeError('Selector is null of white spaces!')
-    }
-    
-    this.timeoutBeforeStart = timeoutBeforeStart
-    this.htmlElement = document.querySelector(selector)
-    this.animStartCoeff = animateStartCoeff
+export class AnimationGroup {
+	public htmlElements: NodeListOf<HTMLElement>
+	public mediaQueries: AnimationMediaQuery[]
+	private defAnimStartCoeff: number
+	private defTimeoutBeforeStart: number
 
-    this.defTimeoutBeforeStart = timeoutBeforeStart
-    this.defAnimStartCoeff = animateStartCoeff
-    this.mediaQueries = mediaQueries
-  }
+	/**
+	* @param mediaQueries
+	* If you need to change the animation assignment settings at a certain width, set the objects of `AnimationMediaQuery`.
+	*/
+	constructor(arg: AnimationGroupArgs, ...mediaQueries: AnimationMediaQuery[]) {
+		if (arg.animateStartCoeff <= 0 || arg.animateStartCoeff > 1) {
+			console.log('[AnimationGroup] AnimateStartCoeff <= 0 or > 1')
+		}
 
-  setMediaProperties(){
-    for (let media of this.mediaQueries) {
-      if (window.innerWidth <= media.activeWitdh) {
-        this.animStartCoeff = media.animateStartCoeff 
-        this.timeoutBeforeStart = media.timeoutBeforeStart
-      } else {
-        this.animStartCoeff = this.defAnimStartCoeff
-        this.timeoutBeforeStart = this.defTimeoutBeforeStart
-      }
-    }
-  }
+		this.htmlElements = document.querySelectorAll(arg.selectors)
+		for (let htmlElement of this.htmlElements) {
+			htmlElement.setAttribute('data-timeout', arg.timeoutBeforeStart.toString())
+			htmlElement.setAttribute('data-view-start-coeff', arg.animateStartCoeff.toString())
+		}
+
+		this.defTimeoutBeforeStart = arg.timeoutBeforeStart
+		this.defAnimStartCoeff = arg.animateStartCoeff
+		this.mediaQueries = mediaQueries
+	}
+
+	setMediaProperties() {
+		for (let media of this.mediaQueries) {
+			if (window.innerWidth <= media.activeWitdh) {
+
+				for (let htmlElement of this.htmlElements) {
+					htmlElement.setAttribute('data-timeout', media.timeoutBeforeStart.toString())
+					htmlElement.setAttribute('data-view-start-coeff', media.animateStartCoeff.toString())
+				}
+			} else {
+				for (let htmlElement of this.htmlElements) {
+					htmlElement.setAttribute('data-timeout', this.defTimeoutBeforeStart.toString())
+					htmlElement.setAttribute('data-view-start-coeff', this.defAnimStartCoeff.toString())
+				}
+			}
+		}
+	}
 }
 export class AnimationMediaQuery {
-  public activeWitdh: number
-  public animateStartCoeff: number
-  public timeoutBeforeStart: number
+	public activeWitdh: number
+	public animateStartCoeff: number
+	public timeoutBeforeStart: number
 
-  constructor(activeWitdh: number, animateStartCoeff: number, timeoutBeforeStart: number) {
-    if (animateStartCoeff <= 0 || animateStartCoeff > 1) {
-      throw new RangeError('animateStartCoeff < 0 or > 1')
-    }
+	/**
+	* At a certain width, it changes the settings for applying the animation class.
+	* 
+	* @param activeWitdh
+	* If the viewport width is less than or equal to this value, new settings for applying the animation class will be applied.
+	* @param animateStartCoeff
+	* For example, 1 => class is assigned as soon as the element is shown on the screen. 0.5 = as soon as it is shown at half.
+	* @param timeoutBeforeStart
+	* The delay before the animation starts in milliseconds.
+	* 
+	* @throws animateStartCoeff < 0 or > 1 - 
+	* Specify the animation start factor greater than 0 and less than 1.
+	*/
+	constructor(activeWitdh: number, animateStartCoeff: number, timeoutBeforeStart: number) {
+		if (animateStartCoeff <= 0 || animateStartCoeff > 1) {
+			console.log('[AnimationMediaQuery] AnimateStartCoeff <= 0 or > 1')
+		}
 
-    this.activeWitdh = activeWitdh
-    this.animateStartCoeff = animateStartCoeff
-    this.timeoutBeforeStart = timeoutBeforeStart
-  }
+		this.activeWitdh = activeWitdh
+		this.animateStartCoeff = animateStartCoeff
+		this.timeoutBeforeStart = timeoutBeforeStart
+	}
 }

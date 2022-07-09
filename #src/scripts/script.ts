@@ -15,23 +15,6 @@ FsNavmenu.burgerActiveClass = 'active'
 import * as sliders from './sliders.js';
 let s = sliders
 
-// AnimationByScroll //
-import Scroll, { AnimationElement, AnimationMediaQuery } from "./modules/animateByScroll.js";
-
-new Scroll(
-  false,
-  new AnimationElement('.press', 0.8),
-  new AnimationElement('.promo', 0.7, 200,
-    new AnimationMediaQuery(426, 0.9, 0),
-  ),
-  new AnimationElement('.advantage', 0.7, 200,
-    new AnimationMediaQuery(426, 0.9, 0),
-  ),
-  new AnimationElement('.advantage_second', 0.7, 600,
-    new AnimationMediaQuery(426, 0.9, 0),
-  ),
-)
-
 //? your scripts //
 let html = document.querySelector('html')
 let themeTogglers = document.querySelectorAll('.theme-toggler')
